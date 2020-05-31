@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+#
+# Shell script to startup rotctld at boot up
+#
+# Anthony Good K3NG
+#
+
+# Log an event to syslog
+logger Starting rotctld...
+
+# /dev/ttyACM0 = the device that your Arduino appears as on your Pi
+# /dev/ttyACM1 = a second device instance that the Arduino may appear on
+# 601 = Yaesu GS-232A protocol
+# 4533 = TCP port that rotctld listens on and receives hamlib rotctld commands
+# 9600 = baud rate that rotctld will use to talk to the Arduino via /dev/ttyACM0
+
+if [ -e /dev/ttyACM0 ]
+then
+  /usr/bin/rotctld -m 601 -r /dev/ttyACM0 -t 4533 -s 9600 &
+else
+  /usr/bin/rotctld -m 601 -r /dev/ttyACM1 -t 4533 -s 9600 &
+fi
+
+exit 0
